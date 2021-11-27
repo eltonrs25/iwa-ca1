@@ -43,6 +43,8 @@ app.get('/api/books/:book_id', function (req, res) {
 // create book and send back all books after creation
 app.post('/api/books', function (req, res) {
 
+    console.log(req.body);
+
     // create mongose method to create a new record into collection
     Book.create(req.body, function (err, book) {
         if (err)
@@ -70,7 +72,7 @@ app.put('/api/books/:book_id', function (req, res) {
 
 // delete a book by id
 app.delete('/api/books/:book_id', function (req, res) {
-    
+
     let id = req.params.book_id;
     Book.remove({
         _id: id
