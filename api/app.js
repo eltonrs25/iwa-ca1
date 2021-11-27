@@ -44,18 +44,11 @@ app.get('/api/books/:book_id', function (req, res) {
 app.post('/api/books', function (req, res) {
 
     // create mongose method to create a new record into collection
-    console.log(req.body);
-
     Book.create(req.body, function (err, book) {
         if (err)
             res.send(err);
 
-        // get and return all the books after newly created employe record
-        Book.find(function (err, books) {
-            if (err)
-                res.send(err)
-            res.json(books);
-        });
+        res.json(book);
     });
 
 });
@@ -63,9 +56,8 @@ app.post('/api/books', function (req, res) {
 
 // create book and send back all books after creation
 app.put('/api/books/:book_id', function (req, res) {
-    // create mongose method to update an existing record into collection
-    console.log(req.body);
 
+    // create mongose method to update an existing record into collection
     let id = req.params.book_id;
 
     // save the user
@@ -78,7 +70,7 @@ app.put('/api/books/:book_id', function (req, res) {
 
 // delete a book by id
 app.delete('/api/books/:book_id', function (req, res) {
-    console.log(req.params.book_id);
+    
     let id = req.params.book_id;
     Book.remove({
         _id: id
