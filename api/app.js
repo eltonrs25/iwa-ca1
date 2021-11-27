@@ -66,7 +66,7 @@ app.put('/api/books/:book_id', function (req, res) {
     Book.findByIdAndUpdate(id, req.body, function (err, book) {
         if (err) throw err;
 
-        res.send('Successfully! Book updated - ' + book.title);
+        res.json(book);
     });
 });
 
@@ -74,13 +74,11 @@ app.put('/api/books/:book_id', function (req, res) {
 app.delete('/api/books/:book_id', function (req, res) {
 
     let id = req.params.book_id;
-    Book.remove({
-        _id: id
-    }, function (err) {
+    Book.findByIdAndDelete(id, function (err) {
         if (err)
             res.send(err);
-        else
-            res.send('Successfully! Book has been Deleted.');
+        
+        res.json({status: true});
     });
 });
 

@@ -18,7 +18,7 @@ function getList() {
                         <i class="fa fa-edit" style="margin-right: 5px;"></i>
                         Edit
                     </button>
-                    <button onclick="delete('${book._id}');" class="btn btn-sm btn-dark">
+                    <button onclick="deleteBook('${book._id}');" class="btn btn-sm btn-dark">
                         <i class="fa fa-trash" style="margin-right: 5px;"></i>
                         Delete
                     </button>
@@ -62,16 +62,33 @@ function add() {
         year
     };
 
-    fetch(API_URL, {
-        method: "POST",
-        body: JSON.stringify(data),
-        headers: { 'Content-Type': 'application/json' }
-    })
-    .then(response => response.json())
-    .then(data => {
-        alert("Book saved successfully!");
-        window.location.href = "index.html";
-    });
+    
+    let id = window.location.href.split('id=').pop();
+    if(!id || id.length !== 24) {
+        fetch(API_URL, {
+            method: "POST",
+            body: JSON.stringify(data),
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert("Book saved successfully!");
+            window.location.href = "index.html";
+        });
+    }
+    else {
+        fetch(`${API_URL}/${id}`, {
+            method: "PUT",
+            body: JSON.stringify(data),
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            alert("Book saved successfully!");
+            window.location.href = "index.html";
+        });
+    }
 }
 
 function edit(id) {
@@ -93,4 +110,18 @@ function load() {
         document.getElementById('txt-genre').value = data.genre;
         document.getElementById('txt-year').value = data.year;
     });
+}
+
+function deleteBook(id) {
+    if(confirm(`Are you sure you want to delete it?`)) {
+        fetch(`${API_URL}/${id}`, {
+            method: "DELETE",
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert("Book deleted successfully!");
+            window.location.reload();
+        });
+    }
 }
